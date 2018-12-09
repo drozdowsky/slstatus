@@ -3,6 +3,11 @@ slstatus - suckless status
 slstatus is a suckless status monitor for window managers that use WM_NAME
 (e.g. dwm) or stdin to fill the status bar.
 
+my addons
+---------
+- format: `[BAT %% RTIME] [CPU %%] [RAM %%] [DATE TIME]`
+- hardmode patch (qurn/slstatus-patches)
+- BAT indicator shows up only if power is not plugged in
 
 Features
 --------

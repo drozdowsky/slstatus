@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* interval between updates (in ms) */
-const unsigned int interval = 1000;
+const unsigned int interval = 3000;
 
 /* text to show if no value can be retrieved */
 static const char unknown_str[] = "n/a";
@@ -61,7 +61,14 @@ static const char unknown_str[] = "n/a";
  * wifi_perc           WiFi signal in percent          interface name (wlan0)
  * wifi_essid          WiFi ESSID                      interface name (wlan0)
  */
-static const struct arg args[] = {
-	/* function format          argument */
-	{ datetime, "%s",           "%F %T" },
-};
+static void
+statusstr(size_t * len, char * status)
+{
+	if (strcmp(battery_state("C23B"), "-") == 0) {
+		*len += snprintf(status + *len, MAXLEN - *len, "[ BAT %s%% ", battery_perc("C23B"));
+		*len += snprintf(status + *len, MAXLEN - *len, "%s ] ", battery_remaining("C23B"));
+	}
+	*len += snprintf(status + *len, MAXLEN - *len, "[ CPU %3s%% ] "  , cpu_perc());
+	*len += snprintf(status + *len, MAXLEN - *len, "[ RAM %s ] "  , ram_used());
+	*len += snprintf(status + *len, MAXLEN - *len, "[ %s ]"  , datetime("%F %T"));
+}
