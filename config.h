@@ -64,11 +64,11 @@ static const char unknown_str[] = "n/a";
 static void
 statusstr(size_t * len, char * status)
 {
-	if (strcmp(battery_state("C23B"), "-") == 0) {
-		*len += snprintf(status + *len, MAXLEN - *len, "[ BAT %s%% ", battery_perc("C23B"));
-		*len += snprintf(status + *len, MAXLEN - *len, "%s ] ", battery_remaining("C23B"));
+	if (strcmp(battery_state("BAT0"), "-") == 0) {
+		*len += snprintf(status + *len, MAXLEN - *len, " %s%% ", battery_perc("BAT0"));
+		/* *len += snprintf(status + *len, MAXLEN - *len, "%s ] ", battery_remaining("BAT0")); */
 	}
-	*len += snprintf(status + *len, MAXLEN - *len, "[ CPU %3s%% ] "  , cpu_perc());
-	*len += snprintf(status + *len, MAXLEN - *len, "[ RAM %s ] "  , ram_used());
-	*len += snprintf(status + *len, MAXLEN - *len, "[ %s ]"  , datetime("%F %T"));
+	*len += snprintf(status + *len, MAXLEN - *len, " %3s%% "  , cpu_perc());
+	*len += snprintf(status + *len, MAXLEN - *len, "%s "  , ram_used());
+	*len += snprintf(status + *len, MAXLEN - *len, " %s "  , datetime("%d %b %I:%M"));
 }
