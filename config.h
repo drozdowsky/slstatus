@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* interval between updates (in ms) */
-const unsigned int interval = 3000;
+const unsigned int interval = 2000;
 
 /* text to show if no value can be retrieved */
 static const char unknown_str[] = "n/a";
@@ -64,11 +64,27 @@ static const char unknown_str[] = "n/a";
 static void
 statusstr(size_t * len, char * status)
 {
+    char vol[5];
+    char bright[5];
+    static char old_vol[5] = "";
+    static char old_bright[5] = "";
+    snprintf(vol, 5, "%s", run_command("vol"));
+    snprintf(bright, 5, "%s", run_command("bright"));
+
+	if (strcmp(vol, old_vol) != 0) {
+        *len += snprintf(status + *len, MAXLEN - *len, "🔉%s ", vol);
+    }
+	if (strcmp(bright, old_bright) != 0) {
+        *len += snprintf(status + *len, MAXLEN - *len, "🔆%s ", bright);
+    }
 	if (strcmp(battery_state("BAT0"), "-") == 0) {
-		*len += snprintf(status + *len, MAXLEN - *len, " %s%% ", battery_perc("BAT0"));
+		*len += snprintf(status + *len, MAXLEN - *len, "🔋%s%% ", battery_perc("BAT0"));
 		/* *len += snprintf(status + *len, MAXLEN - *len, "%s ] ", battery_remaining("BAT0")); */
 	}
 	*len += snprintf(status + *len, MAXLEN - *len, " %3s%% "  , cpu_perc());
 	*len += snprintf(status + *len, MAXLEN - *len, "%s "  , ram_used());
 	*len += snprintf(status + *len, MAXLEN - *len, " %s "  , datetime("%d %b %I:%M"));
+
+    strcpy(old_vol, vol);
+    strcpy(old_bright, bright);
 }
